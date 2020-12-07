@@ -1,0 +1,45 @@
+@import "../../node_modules/include-media/dist/include-media";
+
+// VARIABLES
+
+$xl: 500px;
+$md: 425px;
+$sm: 320px;
+
+$breakpoints: (xl: $xl, md: $md, sm: $sm);
+
+$tr-dur: 0.3s;
+$tr-func: cubic-bezier(0.25, 1, 0.5, 1);
+
+// MIXINS
+
+@mixin transition($properties: all, $duration: $tr-dur, $method: $tr-func) {
+  $value: ();
+
+  @each $property in $properties {
+    @if length($value) > 0 {
+      $value: append($value, unquote(",") #{$property} $duration $method);
+    }
+
+    @else {
+      $value: append($value, #{$property} $duration $method);
+    }
+  }
+
+  transition: $value;
+}
+
+@mixin flex-wrapper($gap-x, $gap-y: $gap-x) {
+  display: flex;
+  flex-wrap: wrap;
+  width: calc(100% + #{$gap-x} + 1px);
+  margin: (-$gap-y / 2) (-$gap-x / 2);
+}
+
+@mixin flex-column($gap-x, $gap-y: $gap-x, $width: auto) {
+  @if $width != auto {
+    width: calc(#{$width} - #{$gap-x});
+  }
+
+  padding: ($gap-y / 2) ($gap-x / 2);
+}

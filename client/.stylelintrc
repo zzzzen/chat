@@ -1,0 +1,9 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "rules": {
+    "color-hex-case": "upper",
+    "no-eol-whitespace": [true, {"ignore": ["empty-lines"]}],
+    "no-descending-specificity": null,
+    "string-quotes": "double"
+  }
+}
