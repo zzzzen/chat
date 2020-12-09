@@ -1,5 +1,5 @@
-import {Schema, model} from 'mongoose';
-import {CategoryInterface} from '../interfaces/models';
+import {Schema, model} from "mongoose";
+import {CategoryInterface} from "../interfaces/models";
 
 const CategorySchema: Schema = new Schema({
   name: {
@@ -8,12 +8,12 @@ const CategorySchema: Schema = new Schema({
   },
   imageSrc: {
     type: String,
-    default: ''
+    default: ""
   },
   user: {
-    ref: 'users',
+    ref: "users",
     type: Schema.Types.ObjectId
   }
 });
 
-export const Category = model<CategoryInterface>('categories', CategorySchema);
+export const Category = model<CategoryInterface>("categories", CategorySchema);

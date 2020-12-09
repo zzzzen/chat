@@ -1,5 +1,5 @@
-import {Request} from 'express';
-import {Schema} from 'mongoose';
+import {Request} from "express";
+import {Schema} from "mongoose";
 
 export interface OrderSearchReq extends Request {
   user: {

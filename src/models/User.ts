@@ -1,5 +1,5 @@
-import {Schema, model} from 'mongoose'
-import {UserInterface} from '../interfaces/models';
+import {Schema, model} from "mongoose";
+import {UserInterface} from "../interfaces/models";
 
 const UserSchema: Schema = new Schema({
   email: {
@@ -13,4 +13,4 @@ const UserSchema: Schema = new Schema({
   }
 });
 
-export const User = model<UserInterface>('users', UserSchema);
+export const User = model<UserInterface>("users", UserSchema);

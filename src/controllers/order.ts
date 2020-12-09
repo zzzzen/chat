@@ -1,7 +1,7 @@
-import {Request, Response} from 'express';
-import {Order} from '../models/Order';
-import {errorHandler} from '../utils/errorHandler';
-import {OrderSearchReq, OrderCreateReq} from '../interfaces/ajax';
+import {Request, Response} from "express";
+import {Order} from "../models/Order";
+import {errorHandler} from "../utils/errorHandler";
+import {OrderSearchReq, OrderCreateReq} from "../interfaces/ajax";
 
 
 export async function getAll(request: Request, res: Response): Promise<void> {
@@ -14,18 +14,18 @@ export async function getAll(request: Request, res: Response): Promise<void> {
   if (req.query.start) {
     query.date = {
       $gte: req.query.start
-    }
+    };
   }
 
   if (req.query.end) {
     if (!query.date) {
-      query.date = {}
+      query.date = {};
     }
-    query.date['$lte'] = req.query.end
+    query.date["$lte"] = req.query.end;
   }
 
   if (req.query.order) {
-    query.order = Number(req.query.order)
+    query.order = Number(req.query.order);
   }
 
   try {
@@ -34,9 +34,9 @@ export async function getAll(request: Request, res: Response): Promise<void> {
       .sort({date: -1})
       .skip(Number(req.query.offset))
       .limit(Number(req.query.limit));
-    res.status(200).json(orders)
+    res.status(200).json(orders);
   } catch (e) {
-    errorHandler(res, e)
+    errorHandler(res, e);
   }
 }
 
@@ -53,8 +53,8 @@ export async function create(request: Request, res: Response): Promise<void> {
       user: req.user.id,
       order: maxOrder + 1
     }).save();
-    res.status(201).json(order)
+    res.status(201).json(order);
   } catch (e) {
-    errorHandler(res, e)
+    errorHandler(res, e);
   }
 }

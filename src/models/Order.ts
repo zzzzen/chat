@@ -1,5 +1,5 @@
-import mongoose, {Schema} from 'mongoose'
-import {OrderInterface} from '../interfaces/models';
+import mongoose, {Schema} from "mongoose";
+import {OrderInterface} from "../interfaces/models";
 
 const OrderSchema: Schema = new Schema({
   date: {
@@ -24,9 +24,9 @@ const OrderSchema: Schema = new Schema({
     }
   ],
   user: {
-    ref: 'users',
+    ref: "users",
     type: Schema.Types.ObjectId
   }
 });
 
-export const Order = mongoose.model<OrderInterface>('orders', OrderSchema);
+export const Order = mongoose.model<OrderInterface>("orders", OrderSchema);

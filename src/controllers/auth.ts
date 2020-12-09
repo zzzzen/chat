@@ -1,10 +1,10 @@
-import {Request, Response} from 'express';
-import {compareSync, genSaltSync, hashSync} from 'bcryptjs';
-import {sign} from 'jsonwebtoken';
-import {User} from '../models/User';
-import {errorHandler} from '../utils/errorHandler';
-import keys from '../config/keys';
-import {LoginReq} from '../interfaces/ajax';
+import {Request, Response} from "express";
+import {compareSync, genSaltSync, hashSync} from "bcryptjs";
+import {sign} from "jsonwebtoken";
+import {User} from "../models/User";
+import {errorHandler} from "../utils/errorHandler";
+import keys from "../config/keys";
+import {LoginReq} from "../interfaces/ajax";
 
 
 export async function login(request: Request, res: Response): Promise<void> {
@@ -25,16 +25,16 @@ export async function login(request: Request, res: Response): Promise<void> {
       });
       res.status(200).json({
         token: `Bearer ${token}`
-      })
+      });
     } else {
       res.status(401).json({
-        massage: 'Неверный пароль'
-      })
+        massage: "Неверный пароль"
+      });
     }
   } else {
     res.status(404).json({
-      message: 'Пользователь с таким email не найден'
-    })
+      message: "Пользователь с таким email не найден"
+    });
   }
 }
 
@@ -45,8 +45,8 @@ export async function register(request: Request, res: Response): Promise<void> {
 
   if (candidate) {
     res.status(409).json({
-      message: 'Пользователь с таким email уже существует'
-    })
+      message: "Пользователь с таким email уже существует"
+    });
   } else {
     const salt = genSaltSync(10);
     const password = req.body.password;
@@ -58,7 +58,7 @@ export async function register(request: Request, res: Response): Promise<void> {
       await user.save();
       res.status(201).json(user);
     } catch (error) {
-      errorHandler(res, error)
+      errorHandler(res, error);
     }
   }
 }

@@ -1,8 +1,8 @@
-import {Schema, model} from 'mongoose';
+import {Schema, model} from "mongoose";
 
-const EquipmentSchema = new Schema({id: Schema.Types.ObjectId, name: String})
+const EquipmentSchema = new Schema({id: Schema.Types.ObjectId, name: String});
 
-const SizeSchema = new Schema({width: Number, depth: Number, height: Number})
+const SizeSchema = new Schema({width: Number, depth: Number, height: Number});
 
 const PositionSchema = new Schema({
   name: {
@@ -26,13 +26,13 @@ const PositionSchema = new Schema({
     required: true
   },
   category: {
-    ref: 'categories',
+    ref: "categories",
     type: Schema.Types.ObjectId
   },
   user: {
-    ref: 'users',
+    ref: "users",
     type: Schema.Types.ObjectId
   }
 });
 
-export const Position = model('positions', PositionSchema);
+export const Position = model("positions", PositionSchema);
