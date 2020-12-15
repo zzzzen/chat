@@ -21,8 +21,10 @@
     "mongoose": "^5.6.8",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
+    "mysql2": "^2.2.5",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
+    "sequelize": "^6.3.5",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },
@@ -36,7 +38,7 @@
     "watch": [
       "./src"
     ],
-    "exec": "npm server",
+    "exec": "npm run server",
     "ext": "ts"
   },
   "devDependencies": {
@@ -54,6 +56,7 @@
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.7.0",
     "concurrently": "^5.3.0",
-    "eslint": "^7.15.0"
+    "eslint": "^7.15.0",
+    "nodemon": "^2.0.6"
   }
 }

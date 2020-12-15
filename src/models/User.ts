@@ -1,16 +1,27 @@
-import {Schema, model} from "mongoose";
-import {UserInterface} from "../interfaces/models";
+import {DataTypes, Model, Optional} from "sequelize";
+import {db} from "../db";
 
-const UserSchema: Schema = new Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true
+export const User = db.define<Model<IUser, IUserCreate>>("users", {
+  id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true
   },
-  password: {
-    type: String,
-    required: true
-  }
+  name: DataTypes.STRING(45),
+  surname: DataTypes.STRING(45),
+  phone: DataTypes.STRING(45),
+  password: DataTypes.STRING(255)
+}, {
+  timestamps: false
 });
 
-export const User = model<UserInterface>("users", UserSchema);
+export interface IUser {
+  id?: number,
+  name: string,
+  surname: string,
+  phone: string,
+  password: string
+}
+
+type IUserCreate = Optional<IUser, "id">

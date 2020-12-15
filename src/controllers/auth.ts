@@ -1,23 +1,23 @@
 import {Request, Response} from "express";
 import {compareSync, genSaltSync, hashSync} from "bcryptjs";
 import {sign} from "jsonwebtoken";
-import {User} from "../models/User";
 import {errorHandler} from "../utils/errorHandler";
 import keys from "../config/keys";
-import {LoginReq} from "../interfaces/ajax";
+import {IUser, User} from "../models/User";
 
 
-export async function login(request: Request, res: Response): Promise<void> {
+export async function login(req: Request<any, any, IUser>, res: Response) {
 
-  const req = request as LoginReq;
-  const candidate = await User.findOne({email: req.body.email});
+  const candidate = await User.findOne({
+    where: {phone: req.body.phone}
+  });
 
   if (candidate) {
-    const passwordResult = compareSync(req.body.password, candidate.password);
+    const passwordResult = compareSync(req.body.password, candidate.getDataValue("password"));
     if (passwordResult) {
       const token = sign({
-        email: candidate.email,
-        userId: candidate._id
+        phone: candidate.getDataValue("phone"),
+        id: candidate.getDataValue("id")
       },
       keys.jwt,
       {
@@ -38,10 +38,11 @@ export async function login(request: Request, res: Response): Promise<void> {
   }
 }
 
-export async function register(request: Request, res: Response): Promise<void> {
+export async function register(req: Request<any, any, IUser>, res: Response) {
 
-  const req = request as LoginReq;
-  const candidate = await User.findOne({email: req.body.email});
+  const candidate = await User.findOne({
+    where: {phone: req.body.phone}
+  });
 
   if (candidate) {
     res.status(409).json({
@@ -49,10 +50,11 @@ export async function register(request: Request, res: Response): Promise<void> {
     });
   } else {
     const salt = genSaltSync(10);
-    const password = req.body.password;
-    const user = new User({
-      email: req.body.email,
-      password: hashSync(password, salt)
+    const user = await User.create({
+      name: req.body.name,
+      surname: req.body.password,
+      phone: req.body.phone,
+      password: hashSync(req.body.password, salt)
     });
     try {
       await user.save();
