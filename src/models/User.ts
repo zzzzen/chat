@@ -6,12 +6,32 @@ export const User = db.define<Model<IUser, IUserCreate>>("users", {
     type: DataTypes.INTEGER,
     allowNull: false,
     autoIncrement: true,
-    primaryKey: true
+    primaryKey: true,
+    unique: true
   },
-  name: DataTypes.STRING(45),
-  surname: DataTypes.STRING(45),
-  phone: DataTypes.STRING(45),
-  password: DataTypes.STRING(255)
+  name: {
+    type: DataTypes.STRING(45),
+    allowNull: false,
+  },
+  surname: {
+    type: DataTypes.STRING(45),
+    allowNull: false,
+  },
+  patronymic: DataTypes.STRING(45),
+  phone: {
+    type: DataTypes.STRING(15),
+    unique: true,
+    allowNull: false
+  },
+  avatar: DataTypes.STRING(255),
+  email: {
+    type: DataTypes.STRING(45),
+    unique: true
+  },
+  password: {
+    type: DataTypes.STRING(255),
+    allowNull: false
+  }
 }, {
   timestamps: false
 });
@@ -20,7 +40,10 @@ export interface IUser {
   id?: number,
   name: string,
   surname: string,
-  phone: string,
+  patronymic?: string,
+  phone: number,
+  avatar?: string,
+  email?: string,
   password: string
 }
 

@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 import passport from "passport";
 
 import {passportMiddleware} from "./middlewares/passport";
-import {authRouter} from "./routes/auth";
+import {profileRouter} from "./routes/profile";
 import {db} from "./db";
 
 export const app = Express();
@@ -24,4 +24,4 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use("/api/auth", authRouter);
+app.use("/api/profile", profileRouter);

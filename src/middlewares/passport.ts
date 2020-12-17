@@ -11,7 +11,7 @@ const options = {
 export const passportMiddleware = (passport: PassportStatic) => {
   passport.use(new Strategy(options, async (payload, done) => {
     try {
-      const user = await User.findByPk(payload.userId);
+      const user = await User.findByPk(payload.id);
       done(null, user || false);
     } catch (e) {
       console.log(e);
