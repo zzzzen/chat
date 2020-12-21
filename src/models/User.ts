@@ -1,5 +1,6 @@
 import {DataTypes, Model, Optional} from "sequelize";
 import {db} from "../db";
+import {genSaltSync, hashSync} from "bcryptjs";
 
 export const User = db.define<Model<IUser, IUserCreate>>("users", {
   id: {
@@ -33,8 +34,17 @@ export const User = db.define<Model<IUser, IUserCreate>>("users", {
     allowNull: false
   }
 }, {
-  timestamps: false
+  timestamps: false,
+  hooks: {
+    beforeSave: prepareNewData,
+    beforeUpdate: prepareNewData,
+  }
 });
+
+function prepareNewData(user: any) {
+  if (user.password) user.password = hashSync(user.password, genSaltSync(10));
+  return user;
+}
 
 export interface IUser {
   id?: number,

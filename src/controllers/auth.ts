@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {compareSync, genSaltSync, hashSync} from "bcryptjs";
+import {compareSync} from "bcryptjs";
 import {sign} from "jsonwebtoken";
 import {errorHandler} from "../utils/errorHandler";
 import keys from "../config/keys";
@@ -55,16 +55,8 @@ export async function register(req: Request<any, any, IUser>, res: Response) {
     });
   }
 
-  const salt = genSaltSync(10);
-
-  const user = await User.create({
-    name: req.body.name,
-    surname: req.body.surname,
-    patronymic: req.body.patronymic,
-    email: req.body.email,
-    phone: req.body.phone,
-    password: hashSync(req.body.password, salt)
-  });
+  if (req.body.id) delete req.body.id;
+  const user = await User.create(req.body);
 
   const data = user.get({plain: true});
   delete  data.password;
@@ -87,15 +79,16 @@ export async function edit(req: Request<any, any, IUser>, res: Response) {
     });
   }
 
-  try {
-    await profile.update({
-      name: req.body.name,
-      surname: req.body.surname,
-      patronymic: req.body.patronymic,
-      email: req.body.email,
-      phone: req.body.phone,
-      password: req.body.password
+  // @ts-ignore
+  if (req.user.id !== req.body.id) {
+    return res.status(400).json({
+      message: "Пользователь не может редактировать чужой профиль"
     });
+  }
+
+  try {
+    delete req.body.id;
+    await profile.update(req.body);
     const data = profile.get({plain: true});
     delete data.password;
     res.status(201).json(data);
