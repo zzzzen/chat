@@ -15,10 +15,14 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
     "plugin:@typescript-eslint/recommended"
   ],
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "detect"
+    }
+  },
   "rules": {
     "indent": ["error", 2],
     "quotes": ["error", "double", {"allowTemplateLiterals": true}],
