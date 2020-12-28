@@ -1,7 +1,6 @@
 import {connect, ConnectedProps} from "react-redux";
-import {TStore} from "../../../store";
-import {TDispatch} from "../../../types/common";
-import {ALoginUser, ALogoutUser} from "../../../actions/user";
+import {TStore} from "../../store";
+import {TDispatch} from "../../types/common";
 import {Header} from "./header";
 
 const mapStateToProps = (store: TStore) => {
@@ -12,8 +11,6 @@ const mapStateToProps = (store: TStore) => {
 
 const mapDispatchToProps = (dispatch: TDispatch) => {
   return {
-    login: () => dispatch(ALoginUser()),
-    logout: () => dispatch(ALogoutUser())
   };
 };
 
