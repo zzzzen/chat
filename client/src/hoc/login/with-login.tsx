@@ -2,8 +2,8 @@ import {connect, ConnectedProps} from "react-redux";
 import {TStore} from "../../store";
 import {TDispatch} from "../../types/common";
 import {AGetUser, ALoginUser, ALogoutUser, TGetUserData, TLoginUserData} from "../../actions/user";
-import {Login} from "./login";
 import * as Yup from "yup";
+import React from "react";
 
 const validationSchema = Yup.object({
   phone: Yup.string()
@@ -36,6 +36,19 @@ const mapDispatchToProps = (dispatch: TDispatch) => {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export const LoginContainer = connector(Login);
-export type TLoginContainer = ConnectedProps<typeof connector>
+export function withLogin<T>(Component: React.ComponentType<T & TLoginContainerProps>) {
 
+  function LoginContainer(props: TLoginContainerProps) {
+    const componentProps = {
+      ...props
+    } as T & TLoginContainerProps;
+
+    return <Component {...componentProps}/>;
+  }
+
+  return connector(LoginContainer) as unknown as React.ComponentType<T>;
+}
+
+export type TLoginContainerProps = ConnectedProps<typeof connector> & {
+  info: number
+};

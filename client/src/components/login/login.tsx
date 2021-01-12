@@ -5,8 +5,9 @@ import {MainLayout} from "../../layouts/main-layout";
 import {CustomInput} from "../ui/custom-input/custom-input";
 import {Form, Formik} from "formik";
 import {CustomButton} from "../ui/custom-button/custom-button";
+import {withLogin} from "../../hoc/login/with-login";
 
-export const Login = React.memo(function(p: TLoginProps) {
+export const Login = React.memo(function(p: TLoginProps & TLoginContainer) {
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(checkUser, []);
@@ -45,6 +46,8 @@ export const Login = React.memo(function(p: TLoginProps) {
   </Formik>;
 });
 
+export const LoginContainer = withLogin<TLoginProps>(Login);
+
 type TLoginProps = {
   className?: string
-} & TLoginContainer
+}

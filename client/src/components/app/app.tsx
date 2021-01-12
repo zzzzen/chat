@@ -2,7 +2,7 @@ import React from "react";
 import {BrowserRouter, Route} from "react-router-dom";
 import {Provider} from "react-redux";
 import {store} from "../../store";
-import {LoginContainer} from "../login/login-container";
+import {LoginContainer} from "../login/login";
 
 export function App() {
   return (
