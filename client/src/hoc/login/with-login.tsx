@@ -1,16 +1,19 @@
+import React from "react";
 import {connect, ConnectedProps} from "react-redux";
+import * as Yup from "yup";
 import {TStore} from "../../store";
 import {TDispatch} from "../../types/common";
 import {AGetUser, ALoginUser, ALogoutUser, TGetUserData, TLoginUserData} from "../../actions/user";
-import * as Yup from "yup";
-import React from "react";
+import {MESSAGES} from "../../utils/messages";
 
 const validationSchema = Yup.object({
   phone: Yup.string()
-    .max(15, "Телефон не может содержать менее 15 символов")
-    .required("Обязательное поле"),
+    .max(11, MESSAGES.maxLength(11))
+    .min(11, MESSAGES.minLength(11))
+    .required(MESSAGES.required),
   password: Yup.string()
-    .required("Обязательное поле")
+    .min(6, MESSAGES.minLength(6))
+    .required(MESSAGES.required)
 });
 
 const initialValues = {

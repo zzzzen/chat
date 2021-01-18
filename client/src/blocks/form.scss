@@ -1,0 +1,20 @@
+.form {
+  $gap-x: 24px;
+  $gap-y: 24px;
+
+  &__text {
+    color: $text-light;
+  }
+
+  &__row {
+    @include flex-wrapper($gap-x, $gap-y);
+  }
+
+  &__col {
+    @include flex-column($gap-x, $gap-y, 100%);
+  }
+
+  &__input {
+    width: 100%;
+  }
+}

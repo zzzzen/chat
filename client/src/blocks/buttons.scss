@@ -1,3 +1,19 @@
-.button-primary {
-  color: red;
+.next-button {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  line-height: 20px;
+  color: #FFF;
+  font-weight: 500;
+
+  &::after {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 12px;
+    margin-bottom: -4px;
+    margin-left: 6px;
+    mask: url("../svg/arrow.svg") no-repeat center;
+    background-color: #FFF;
+  }
 }

@@ -1,49 +1,72 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import "./login.scss";
-import {TLoginContainer} from "./login-container";
-import {MainLayout} from "../../layouts/main-layout";
 import {CustomInput} from "../ui/custom-input/custom-input";
 import {Form, Formik} from "formik";
 import {CustomButton} from "../ui/custom-button/custom-button";
-import {withLogin} from "../../hoc/login/with-login";
+import {TLoginContainerProps, withLogin} from "../../hoc/login/with-login";
 
-export const Login = React.memo(function(p: TLoginProps & TLoginContainer) {
-  const [isChecking, setIsChecking] = useState(true);
+export const Login = React.memo(function(p: TLoginProps & TLoginContainerProps) {
 
-  useEffect(checkUser, []);
+  return <div className={`${p.className || ""} login`}>
+    <Formik initialValues={p.initialValues}
+      validationSchema={p.validationSchema}
+      onSubmit={(values) => p.login(values)}>
+      <Form className="login__container">
+        <div className="login__header">
+          <div className="login__row login__row--row-c">
+            <div className="login__col">
+              <div className="login__logo-wrapper">
+                <div className="login__logo logo"></div>
+                <div className="login__header-title text">Messenger</div>
+              </div>
+            </div>
 
-  function checkUser() {
-    if (p.userInfo) p.getUser({id: p.userInfo.id});
-  }
-
-  return <Formik initialValues={p.initialValues}
-    validationSchema={p.validationSchema}
-    onSubmit={(values) => p.login(values)}>
-    <Form className={`${p.className || ""} login`}>
-      <div className="login__form form">
-        <div className="form__row">
-          <div className="form__col">
-            <CustomInput className="form__input"
-              name="phone"
-              placeholder="телефон"/>
-          </div>
-
-          <div className="form__col">
-            <CustomInput className="form__input"
-              name="password"
-              placeholder="password"/>
+            <div className="login__col login__col--col-r">
+              <div className="login__next next-button">Next</div>
+            </div>
           </div>
         </div>
-        <div className="form__row">
-          <div className="form__col">
-            <CustomButton className="form__button"
-              children="Отправить"
-              htmlType="submit"/>
+        <div className="login__form form">
+          <div className="form__row">
+            <div className="form__col">
+              <div className="form__title title">Sign in</div>
+            </div>
+          </div>
+          <div className="form__row">
+            <div className="form__col">
+              <div className="form__text text">
+                Please enter your full phone number and password.
+              </div>
+            </div>
+          </div>
+          <div className="form__row">
+            <div className="form__col">
+              <CustomInput className="form__input"
+                name="phone"
+                placeholder="телефон"
+                type="tel"
+                isMasked={true}
+                formatType="phone"/>
+            </div>
+
+            <div className="form__col">
+              <CustomInput className="form__input"
+                name="password"
+                placeholder="password"
+                type="password"/>
+            </div>
+          </div>
+          <div className="form__row">
+            <div className="form__col">
+              <CustomButton className="form__button"
+                children="Отправить"
+                htmlType="submit"/>
+            </div>
           </div>
         </div>
-      </div>
-    </Form>
-  </Formik>;
+      </Form>
+    </Formik>
+  </div>;
 });
 
 export const LoginContainer = withLogin<TLoginProps>(Login);

@@ -1,11 +1,20 @@
-export function getSquare(width: number, depth: number): string {
-  return (width * depth).toFixed(2);
+export function toEvent<T>(value: T, name?: string) {
+  return {target: {value, name}};
 }
 
-export function generateId(): string {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2);
-}
+export function numToStr(val: number, textForms: string[]) {
+  // textForms: ["час", "часа", "часов"]
+  const n = Math.abs(val) % 100;
+  const n1 = val % 10;
 
-export function hasValue(value: any): boolean {
-  return value !== undefined && value !== "" && value !== null;
+  if (n > 10 && n < 20) {
+    return textForms[2];
+  }
+  if (n1 > 1 && n1 < 5) {
+    return textForms[1];
+  }
+  if (n1 === 1) {
+    return textForms[0];
+  }
+  return textForms[2];
 }

@@ -1,0 +1,9 @@
+.ant-input {
+  border: none;
+  border-bottom: 2px solid $border-color;
+
+  &:focus {
+    border-color: $border-active;
+    box-shadow: none;
+  }
+}

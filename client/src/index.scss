@@ -1,4 +1,11 @@
+@import "utils/mixins-and-vars";
+@import "blocks/layout";
+@import "blocks/text";
+@import "blocks/icons";
 @import "blocks/buttons";
+@import "blocks/input";
+@import "blocks/common";
+@import "blocks/form";
 
 @font-face {
   font-family: "Rubik";
@@ -10,6 +17,12 @@
   font-family: "Rubik";
   src: url("fonts/Rubik-Regular.ttf") format("truetype");
   font-weight: 400;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("fonts/Rubik-Medium.ttf") format("truetype");
+  font-weight: 500;
 }
 
 @font-face {
