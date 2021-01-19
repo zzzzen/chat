@@ -17,7 +17,23 @@
   line-height: normal;
 }
 
+.input-error {
+  margin-top: 2px;
+  font-size: 10px;
+  color: red;
+}
+
 .ant-input {
   font-size: 13px;
   color: $text-normal;
+  padding: 2px 0;
+
+  &.ant-input--error {
+    border-color: $error;
+  }
+
+  &::placeholder {
+    font-size: 13px;
+    color: $text-light;
+  }
 }

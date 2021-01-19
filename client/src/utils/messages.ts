@@ -1,7 +1,7 @@
 import {numToStr} from "./common";
 
 export const MESSAGES = {
-  required: "Обязательное поле",
-  maxLength: (max: number) => `Поле не может содержать более ${max} ${numToStr(max, ["символ", "символа", "символов"])}`,
-  minLength: (min: number) => `Поле не может содержать менее ${min} ${numToStr(min, ["символ", "символа", "символов"])}`
+  required: "Required",
+  maxLength: (max: number) => `The field cannot contain more than ${max} ${numToStr(max, ["character", "characters"])}`,
+  minLength: (min: number) => `The field cannot contain less than ${min} ${numToStr(min, ["character", "characters"])}`
 };

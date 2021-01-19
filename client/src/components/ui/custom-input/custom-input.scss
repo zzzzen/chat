@@ -1,3 +1,9 @@
-.custom-input {
+@import "../../../utils/mixins-and-vars";
 
+.custom-input {
+  &--error {
+    .ant-input {
+      border-color: $error;
+    }
+  }
 }

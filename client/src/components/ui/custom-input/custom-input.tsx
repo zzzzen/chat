@@ -10,6 +10,7 @@ import {toEvent} from "../../../utils/common";
 export const CustomInput = React.memo((p: TCustomInputProps) => {
   const [field, meta] = useField(p);
   const inputProps: any = {...p, ...field};
+  const inValid = meta.error && meta.touched;
 
   switch (p.formatType) {
   case "gapNumber": {
@@ -33,10 +34,10 @@ export const CustomInput = React.memo((p: TCustomInputProps) => {
     inputProps.className = "ant-input";
   }
 
-  return <div className={`${p.className || ""} custom-input`}>
+  return <div className={`${p.className || ""} custom-input ${inValid && "custom-input--error"}`}>
     {p.label ? <div className="custom-input__label input-label">{p.label}</div> : null}
     {p.isMasked ? <NumberFormat {...inputProps}/> : <Input {...inputProps}/>}
-    {meta.error && meta.touched && <div className="custom-input__error input-error">{meta.error}</div>}
+    {inValid && <div className="custom-input__error input-error">{meta.error}</div>}
   </div>;
 
   function onValueChange(values: NumberFormatValues) {
@@ -49,7 +50,6 @@ export const CustomInput = React.memo((p: TCustomInputProps) => {
 type TCustomInputProps = InputProps & FieldHookConfig<any> & NumberFormatProps & {
   label?: string,
   disabled?: boolean,
-  valid?: boolean,
   isMasked?: boolean,
   formatType?: "gapNumber" | "phone"
 }

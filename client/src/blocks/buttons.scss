@@ -1,10 +1,16 @@
-.next-button {
+.next-button,
+.next-button:focus {
   display: flex;
   align-items: center;
+  padding: 0;
+  border: none;
   font-size: 13px;
   line-height: 20px;
   color: #FFF;
   font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
 
   &::after {
     content: "";

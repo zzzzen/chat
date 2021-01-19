@@ -2,7 +2,6 @@ import React from "react";
 import "./login.scss";
 import {CustomInput} from "../ui/custom-input/custom-input";
 import {Form, Formik} from "formik";
-import {CustomButton} from "../ui/custom-button/custom-button";
 import {TLoginContainerProps, withLogin} from "../../hoc/login/with-login";
 
 export const Login = React.memo(function(p: TLoginProps & TLoginContainerProps) {
@@ -22,7 +21,7 @@ export const Login = React.memo(function(p: TLoginProps & TLoginContainerProps) 
             </div>
 
             <div className="login__col login__col--col-r">
-              <div className="login__next next-button">Next</div>
+              <button className="login__next next-button" type="submit">Next</button>
             </div>
           </div>
         </div>
@@ -43,7 +42,7 @@ export const Login = React.memo(function(p: TLoginProps & TLoginContainerProps) 
             <div className="form__col">
               <CustomInput className="form__input"
                 name="phone"
-                placeholder="телефон"
+                placeholder="Phone"
                 type="tel"
                 isMasked={true}
                 formatType="phone"/>
@@ -52,15 +51,8 @@ export const Login = React.memo(function(p: TLoginProps & TLoginContainerProps) 
             <div className="form__col">
               <CustomInput className="form__input"
                 name="password"
-                placeholder="password"
+                placeholder="Password"
                 type="password"/>
-            </div>
-          </div>
-          <div className="form__row">
-            <div className="form__col">
-              <CustomButton className="form__button"
-                children="Отправить"
-                htmlType="submit"/>
             </div>
           </div>
         </div>
