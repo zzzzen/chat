@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {connect, ConnectedProps} from "react-redux";
 import * as Yup from "yup";
 import {TStore} from "../../store";
-import {TDispatch} from "../../types/common";
-import {AGetUser, ALoginUser, ALogoutUser, TGetUserData, TLoginUserData} from "../../actions/user";
+import {TDispatch, TResponseAction} from "../../types/common";
+import {AGetUser, ALoginUser, ALogoutUser, TLoginUserData} from "../../actions/user";
 import {MESSAGES} from "../../utils/messages";
 
 const validationSchema = Yup.object({
@@ -31,7 +31,7 @@ const mapStateToProps = (store: TStore) => {
 
 const mapDispatchToProps = (dispatch: TDispatch) => {
   return {
-    getUser: (data: TGetUserData) => dispatch(AGetUser(data)),
+    getUser: () => dispatch(AGetUser()) as unknown as Promise<TResponseAction>,
     login: (data: TLoginUserData) => dispatch(ALoginUser(data)),
     logout: () => dispatch(ALogoutUser())
   };
@@ -41,9 +41,38 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export function withLogin<T>(Component: React.ComponentType<T & TLoginContainerProps>) {
 
-  function LoginContainer(props: TLoginContainerProps) {
+  function LoginContainer(p: TLoginContainerProps) {
+    const [isChecked, setChecked] = useState(false);
+    const [isChecking, setChecking] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
+
+    useEffect(() => {
+      if (!isChecked && !isChecking) {
+        setChecking(true);
+        p.getUser().then(() => {
+          setChecking(false);
+        });
+      }
+    }, []);
+
+    useEffect(() => {
+      if (!isChecked && p.userInfo) {
+        setChecked(true);
+        setIsLogin(true);
+      }
+    });
+
+    useEffect(() => {
+      if (isChecked && isChecking) {
+        setChecking(false);
+      }
+    });
+
     const componentProps = {
-      ...props
+      ...p,
+      isChecked,
+      isLogin,
+      isChecking
     } as T & TLoginContainerProps;
 
     return <Component {...componentProps}/>;
@@ -53,5 +82,7 @@ export function withLogin<T>(Component: React.ComponentType<T & TLoginContainerP
 }
 
 export type TLoginContainerProps = ConnectedProps<typeof connector> & {
-  info: number
+  isLogin: boolean,
+  isChecked: boolean,
+  isChecking: boolean
 };

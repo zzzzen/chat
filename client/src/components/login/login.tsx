@@ -3,8 +3,12 @@ import "./login.scss";
 import {CustomInput} from "../ui/custom-input/custom-input";
 import {Form, Formik} from "formik";
 import {TLoginContainerProps, withLogin} from "../../hoc/login/with-login";
+import {MainLayout} from "../../layouts/main-layout";
 
 export const Login = React.memo(function(p: TLoginProps & TLoginContainerProps) {
+
+  if (p.isChecking) return null;
+  if (p.isChecked && p.isLogin) return <MainLayout/>;
 
   return <div className={`${p.className || ""} login`}>
     <Formik initialValues={p.initialValues}

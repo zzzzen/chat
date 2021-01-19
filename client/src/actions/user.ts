@@ -20,7 +20,9 @@ export type TUserAction =
     type: typeof USER_LOGOUT
   } | {
     type: typeof USER_GET,
-    payload: AxiosRequestConfig
+    payload: {
+      request: AxiosRequestConfig
+    }
   } | {
     type: typeof USER_GET_SUCCESS,
     payload: AxiosResponse<Omit<TUserInfo, "password">>
@@ -38,13 +40,11 @@ export const ALoginUser = (data: TLoginUserData): TUserAction => ({
   }
 });
 
-export type TGetUserData = {id: number};
-export const AGetUser = (data: TGetUserData): TUserAction => ({
-  type: USER_LOGIN,
+export const AGetUser = (): TUserAction => ({
+  type: USER_GET,
   payload: {
     request: {
       url: "/profile",
-      data
     }
   }
 });
