@@ -97,20 +97,12 @@ export async function edit(req: Request<any, any, IUser>, res: Response) {
   }
 }
 
-export async function getProfile(req: Request<any, any, IUser>, res: Response) {
-
-  const profile = await User.findByPk(req.body.id);
-
-  if (!profile) {
-    return res.status(409).json({
-      message: "Пользователь не найден"
-    });
-  }
+export async function getProfile(req: Request, res: Response) {
+  const user = req.user as IUser;
 
   try {
-    const data = profile.get({plain: true});
-    delete data.password;
-    res.status(201).json(data);
+    delete user.password;
+    res.status(200).json(user);
   } catch (error) {
     errorHandler(res, error);
   }
