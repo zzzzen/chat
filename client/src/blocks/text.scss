@@ -10,6 +10,12 @@
   font-weight: normal;
 }
 
+.link {
+  text-decoration: underline;
+  color: $link-color;
+  cursor: pointer;
+}
+
 .input-label {
   font-weight: 400;
   font-size: 13px;

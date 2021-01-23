@@ -63,7 +63,11 @@ export async function register(req: Request<any, any, IUser>, res: Response) {
 
   try {
     await user.save();
-    res.status(201).json(data);
+    const token = sign({id: data.id}, keys.jwt, {expiresIn: 3600});
+    res.status(201).json({
+      token: `Bearer ${token}`,
+      ...data
+    });
   } catch (error) {
     errorHandler(res, error);
   }

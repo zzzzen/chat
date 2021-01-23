@@ -1,5 +1,5 @@
 import produce from "immer";
-import {TUserAction, USER_GET_SUCCESS, USER_LOGIN_SUCCESS, USER_LOGOUT} from "../actions/user";
+import {TUserAction, USER_GET_SUCCESS, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_SUCCESS} from "../actions/user";
 import {TUserInfo} from "../types/common";
 import {setToken} from "../utils/api";
 
@@ -7,7 +7,6 @@ export const userReducer = produce((draft: TUserStore, action: TUserAction) => {
   switch (action.type) {
 
   case USER_LOGIN_SUCCESS: {
-    console.log(action.payload.data);
     setToken(action.payload.data.token);
     delete action.payload.data.token;
     draft.info = action.payload.data;
@@ -20,6 +19,12 @@ export const userReducer = produce((draft: TUserStore, action: TUserAction) => {
   } break;
 
   case USER_GET_SUCCESS: {
+    draft.info = action.payload.data;
+  } break;
+
+  case USER_REGISTER_SUCCESS: {
+    setToken(action.payload.data.token);
+    delete action.payload.data.token;
     draft.info = action.payload.data;
   } break;
 

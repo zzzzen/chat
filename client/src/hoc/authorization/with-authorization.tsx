@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {connect, ConnectedProps} from "react-redux";
 import * as Yup from "yup";
 import {TStore} from "../../store";
@@ -39,18 +39,25 @@ const mapDispatchToProps = (dispatch: TDispatch) => {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export function withLogin<T>(Component: React.ComponentType<T & TLoginContainerProps>) {
+export function withAuthorization<T>(Component: React.ComponentType<T & TAuthorizationContainerProps>) {
 
-  function LoginContainer(p: TLoginContainerProps) {
+  function AuthorizationContainer(p: TAuthorizationContainerProps) {
     const [isChecked, setChecked] = useState(false);
     const [isChecking, setChecking] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
+    const isMountedRef = useRef(true);
+
+    useEffect(() => {
+      return () => {
+        isMountedRef.current = false;
+      };
+    }, []);
 
     useEffect(() => {
       if (!isChecked && !isChecking) {
         setChecking(true);
         p.getUser().then(() => {
-          setChecking(false);
+          if (isMountedRef.current) setChecking(false);
         });
       }
     }, []);
@@ -73,16 +80,16 @@ export function withLogin<T>(Component: React.ComponentType<T & TLoginContainerP
       isChecked,
       isLogin,
       isChecking
-    } as T & TLoginContainerProps;
+    } as T & TAuthorizationContainerProps;
 
     return <Component {...componentProps}/>;
   }
 
-  return connector(LoginContainer) as unknown as React.ComponentType<T>;
+  return connector(AuthorizationContainer) as unknown as React.ComponentType<T>;
 }
 
-export type TLoginContainerProps = ConnectedProps<typeof connector> & {
+export type TAuthorizationContainerProps = ConnectedProps<typeof connector> & {
   isLogin: boolean,
   isChecked: boolean,
   isChecking: boolean
-};
+}

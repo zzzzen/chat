@@ -6,6 +6,17 @@
     color: $text-light;
   }
 
+  &__block {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 24px;
+
+    :last-child {
+      margin-bottom: 0;
+    }
+  }
+
   &__row {
     @include flex-wrapper($gap-x, $gap-y);
   }

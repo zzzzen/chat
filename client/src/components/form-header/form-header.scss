@@ -1,12 +1,10 @@
 @import "../../utils/mixins-and-vars";
 
-.login {
+.form-header {
   $gap-x: 20px;
   $gap-y: 20px;
 
-  &__header {
-    padding: 16px;
-  }
+  padding: 16px;
 
   &__row {
     @include flex-wrapper($gap-x, $gap-y);
@@ -25,7 +23,7 @@
     margin-right: 16px;
   }
 
-  &__header-title {
+  &__title {
     color: #FFF;
   }
 
