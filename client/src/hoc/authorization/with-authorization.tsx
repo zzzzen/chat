@@ -5,6 +5,7 @@ import {TStore} from "../../store";
 import {TDispatch, TResponseAction} from "../../types/common";
 import {AGetUser, ALoginUser, ALogoutUser, TLoginUserData} from "../../actions/user";
 import {MESSAGES} from "../../utils/messages";
+import {FormikHelpers} from "formik";
 
 const validationSchema = Yup.object({
   phone: Yup.string()
@@ -32,7 +33,7 @@ const mapStateToProps = (store: TStore) => {
 const mapDispatchToProps = (dispatch: TDispatch) => {
   return {
     getUser: () => dispatch(AGetUser()) as unknown as Promise<TResponseAction>,
-    login: (data: TLoginUserData) => dispatch(ALoginUser(data)),
+    login: (data: TLoginUserData) => dispatch(ALoginUser(data)) as unknown as Promise<TResponseAction>,
     logout: () => dispatch(ALogoutUser())
   };
 };
@@ -75,11 +76,21 @@ export function withAuthorization<T>(Component: React.ComponentType<T & TAuthori
       }
     });
 
+    const validateAjax: validateAjax = (resp, actions) => {
+      if (resp.error && resp.error.response.status === 401) {
+        actions.setErrors({
+          phone: MESSAGES.login,
+          password: MESSAGES.login
+        });
+      }
+    };
+
     const componentProps = {
       ...p,
       isChecked,
       isLogin,
-      isChecking
+      isChecking,
+      validateAjax
     } as T & TAuthorizationContainerProps;
 
     return <Component {...componentProps}/>;
@@ -91,5 +102,8 @@ export function withAuthorization<T>(Component: React.ComponentType<T & TAuthori
 export type TAuthorizationContainerProps = ConnectedProps<typeof connector> & {
   isLogin: boolean,
   isChecked: boolean,
-  isChecking: boolean
+  isChecking: boolean,
+  validateAjax: validateAjax
 }
+
+type validateAjax = (resp: TResponseAction, actions: FormikHelpers<typeof initialValues>) => void

@@ -1,14 +1,19 @@
 import React from "react";
 import {TRegisterContainerProps, withRegister} from "../../hoc/authorization/with-register";
-import {Form, Formik} from "formik";
+import {Form, Formik, FormikHelpers} from "formik";
 import {CustomInput} from "../ui/custom-input/custom-input";
 import {FormHeader} from "../form-header/form-header";
 
 export const Register = React.memo((p: TRegisterProps & TRegisterContainerProps) => {
+  const onSubmit = async (values: typeof p.initialValues, actions: FormikHelpers<typeof p.initialValues>) => {
+    const resp = await p.register(values);
+    await p.validateAjax(resp, actions);
+  };
+
   return <div className={`${p.className || ""} register`}>
     <Formik initialValues={p.initialValues}
       validationSchema={p.validationSchema}
-      onSubmit={(values) => p.register(values)}>
+      onSubmit={onSubmit}>
       <Form className="register__container">
         <FormHeader className="register__header"/>
         <div className="login__form form">

@@ -1,9 +1,10 @@
 import React from "react";
 import {connect, ConnectedProps} from "react-redux";
-import {TDispatch} from "../../types/common";
+import {TDispatch, TResponseAction, TUserInfo} from "../../types/common";
 import {ARegisterUser, TRegisterUserData} from "../../actions/user";
 import {MESSAGES} from "../../utils/messages";
 import {Yup} from "../../utils/yup";
+import {FormikHelpers} from "formik";
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -45,7 +46,7 @@ const mapStateToProps = () => {
 
 const mapDispatchToProps = (dispatch: TDispatch) => {
   return {
-    register: (data: TRegisterUserData) => dispatch(ARegisterUser(data))
+    register: (data: TRegisterUserData) => dispatch(ARegisterUser(data)) as unknown as TResponseAction
   };
 };
 
@@ -53,9 +54,18 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export function withRegister<T>(Component: React.ComponentType<T & TRegisterContainerProps>) {
 
+  const validateAjax: validateAjax = (resp, actions) => {
+    if (resp.error && resp.error.response.status === 409) {
+      actions.setErrors({
+        phone: MESSAGES.register
+      });
+    }
+  };
+
   function RegisterContainer(p: TRegisterContainerProps) {
     const componentProps = {
       ...p,
+      validateAjax
     } as T & TRegisterContainerProps;
 
     return <Component {...componentProps}/>;
@@ -65,5 +75,7 @@ export function withRegister<T>(Component: React.ComponentType<T & TRegisterCont
 }
 
 export type TRegisterContainerProps = ConnectedProps<typeof connector> & {
-
+  validateAjax: validateAjax
 };
+
+type validateAjax = (resp: TResponseAction, actions: FormikHelpers<typeof initialValues>) => void

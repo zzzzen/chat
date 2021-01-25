@@ -1,16 +1,21 @@
 import React from "react";
 import "./login.scss";
 import {CustomInput} from "../ui/custom-input/custom-input";
-import {Form, Formik} from "formik";
+import {Form, Formik, FormikHelpers} from "formik";
 import {TAuthorizationContainerProps, withAuthorization} from "../../hoc/authorization/with-authorization";
 import {FormHeader} from "../form-header/form-header";
 
 export const Login = React.memo((p: TAuthorizationProps & TAuthorizationContainerProps) => {
 
+  const onSubmit = async (values: typeof p.initialValues, actions: FormikHelpers<typeof p.initialValues>) => {
+    const resp = await p.login(values);
+    await p.validateAjax(resp, actions);
+  };
+
   return <div className={`${p.className || ""} login`}>
     <Formik initialValues={p.initialValues}
       validationSchema={p.validationSchema}
-      onSubmit={(values) => p.login(values)}>
+      onSubmit={onSubmit}>
       <Form className="login__container">
         <FormHeader className="login__header"/>
         <div className="login__form form">
