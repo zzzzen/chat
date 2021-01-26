@@ -6,6 +6,7 @@ import {TDispatch, TResponseAction} from "../../types/common";
 import {AGetUser, ALoginUser, ALogoutUser, TLoginUserData} from "../../actions/user";
 import {MESSAGES} from "../../utils/messages";
 import {FormikHelpers} from "formik";
+import {ASetLoaderState} from "../../actions/common";
 
 const validationSchema = Yup.object({
   phone: Yup.string()
@@ -32,9 +33,10 @@ const mapStateToProps = (store: TStore) => {
 
 const mapDispatchToProps = (dispatch: TDispatch) => {
   return {
-    getUser: () => dispatch(AGetUser()) as unknown as Promise<TResponseAction>,
-    login: (data: TLoginUserData) => dispatch(ALoginUser(data)) as unknown as Promise<TResponseAction>,
-    logout: () => dispatch(ALogoutUser())
+    getUser: () => dispatch(AGetUser()) as Promise<TResponseAction>,
+    login: (data: TLoginUserData) => dispatch(ALoginUser(data)) as Promise<TResponseAction>,
+    logout: () => dispatch(ALogoutUser()),
+    setLoaderState: (visible: boolean) => dispatch(ASetLoaderState(visible))
   };
 };
 

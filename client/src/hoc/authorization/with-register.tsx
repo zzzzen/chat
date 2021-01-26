@@ -5,6 +5,7 @@ import {ARegisterUser, TRegisterUserData} from "../../actions/user";
 import {MESSAGES} from "../../utils/messages";
 import {Yup} from "../../utils/yup";
 import {FormikHelpers} from "formik";
+import {ASetLoaderState} from "../../actions/common";
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -46,7 +47,8 @@ const mapStateToProps = () => {
 
 const mapDispatchToProps = (dispatch: TDispatch) => {
   return {
-    register: (data: TRegisterUserData) => dispatch(ARegisterUser(data)) as unknown as TResponseAction
+    register: (data: TRegisterUserData) => dispatch(ARegisterUser(data)) as Promise<TResponseAction>,
+    setLoaderState: (visible: boolean) => dispatch(ASetLoaderState(visible))
   };
 };
 

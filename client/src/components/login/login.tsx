@@ -8,8 +8,10 @@ import {FormHeader} from "../form-header/form-header";
 export const Login = React.memo((p: TAuthorizationProps & TAuthorizationContainerProps) => {
 
   const onSubmit = async (values: typeof p.initialValues, actions: FormikHelpers<typeof p.initialValues>) => {
+    p.setLoaderState(true);
     const resp = await p.login(values);
     await p.validateAjax(resp, actions);
+    p.setLoaderState(false);
   };
 
   return <div className={`${p.className || ""} login`}>

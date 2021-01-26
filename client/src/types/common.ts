@@ -1,7 +1,7 @@
 import {AxiosRequestConfig, AxiosResponse} from "axios";
 
-export type TAction = {type: string, payload?: any}
-export type TDispatch = (action: TAction) => void;
+export type TAction <T = any> = {type: string, payload?: T}
+export type TDispatch = (action: TAction) => unknown;
 export type TAsyncDispatch = <T> (action: TAction) => Promise<T>;
 
 export type TUserInfo = {

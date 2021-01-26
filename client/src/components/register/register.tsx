@@ -6,8 +6,10 @@ import {FormHeader} from "../form-header/form-header";
 
 export const Register = React.memo((p: TRegisterProps & TRegisterContainerProps) => {
   const onSubmit = async (values: typeof p.initialValues, actions: FormikHelpers<typeof p.initialValues>) => {
+    p.setLoaderState(true);
     const resp = await p.register(values);
     await p.validateAjax(resp, actions);
+    p.setLoaderState(false);
   };
 
   return <div className={`${p.className || ""} register`}>
@@ -16,7 +18,7 @@ export const Register = React.memo((p: TRegisterProps & TRegisterContainerProps)
       onSubmit={onSubmit}>
       <Form className="register__container">
         <FormHeader className="register__header"/>
-        <div className="login__form form">
+        <div className="register__form form">
           <div className="form__row">
             <div className="form__col">
               <div className="form__title title">Sign up</div>
