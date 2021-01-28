@@ -1,4 +1,5 @@
 import React from "react";
+import "./register.scss";
 import {TRegisterContainerProps, withRegister} from "../../hoc/authorization/with-register";
 import {Form, Formik, FormikHelpers} from "formik";
 import {CustomInput} from "../ui/custom-input/custom-input";
