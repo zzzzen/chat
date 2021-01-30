@@ -4,9 +4,11 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import passport from "passport";
 
+import {db} from "./db";
 import {passportMiddleware} from "./middlewares/passport";
 import {profileRouter} from "./routes/profile";
-import {db} from "./db";
+import {roomRouter} from "./routes/room";
+import {messageRouter} from "./routes/message";
 
 export const app = Express();
 
@@ -25,3 +27,5 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use("/api/profile", profileRouter);
+app.use("/api/room", roomRouter);
+app.use("/api/message", messageRouter);

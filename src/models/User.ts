@@ -4,10 +4,6 @@ import {compareSync, genSaltSync, hashSync} from "bcryptjs";
 import {sign} from "jsonwebtoken";
 import keys from "../config/keys";
 
-type TInstanceMethods = {
-  getClientData: () => Omit<IUser, "password">
-}
-
 export const USER_CODE_EXISTS = 409;
 export const USER_CODE_NOT_FOUND = 400;
 export const USER_CODE_UNAUTHORIZED = 401;
@@ -127,3 +123,7 @@ export interface IUser {
 }
 
 type IUserCreate = Optional<IUser, "id">
+
+type TInstanceMethods = {
+  getClientData: () => Omit<IUser, "password">
+}

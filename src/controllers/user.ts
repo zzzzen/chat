@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import {errorHandler} from "../utils/errorHandler";
 import {IUser, User, USER_CODE_EXISTS, USER_CODE_NOT_FOUND, USER_CODE_UNAUTHORIZED} from "../models/User";
+import {UserRoom} from "../models/UserRoom";
 
 
 export async function login(req: Request<any, any, IUser>, res: Response) {
@@ -81,5 +82,14 @@ export async function getProfile(req: Request, res: Response) {
     res.status(200).json(user);
   } catch (error) {
     errorHandler(res, error);
+  }
+}
+
+export async function getRooms(req: Request<any, any, {id: number}>, res: Response) {
+  try {
+    const rooms = await UserRoom.getUserRooms(req.body.id);
+    res.status(200).json(rooms);
+  } catch (e) {
+    errorHandler(res, e);
   }
 }
