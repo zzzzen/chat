@@ -1,3 +1,4 @@
+import http from "http";
 import Express from "express";
 import cors from "cors";
 import morgan from "morgan";
@@ -10,7 +11,7 @@ import {profileRouter} from "./routes/profile";
 import {roomRouter} from "./routes/room";
 import {messageRouter} from "./routes/message";
 
-export const app = Express();
+const app = Express();
 
 db.authenticate()
   .then(() => console.log("DB connected"))
@@ -29,3 +30,10 @@ app.use(cors());
 app.use("/api/profile", profileRouter);
 app.use("/api/room", roomRouter);
 app.use("/api/message", messageRouter);
+
+export const server = http.createServer(app);
+const websocket = require("socket.io")(server);
+
+websocket.on("connection", () => {
+  console.log("websocket connected");
+});

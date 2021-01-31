@@ -24,6 +24,7 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "sequelize": "^6.3.5",
+    "socket.io": "^3.1.0",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },
