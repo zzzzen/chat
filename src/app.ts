@@ -8,8 +8,9 @@ import passport from "passport";
 import {db} from "./db";
 import {passportMiddleware} from "./middlewares/passport";
 import {profileRouter} from "./routes/profile";
-import {roomRouter} from "./routes/room";
-import {messageRouter} from "./routes/message";
+import {Server} from "socket.io";
+import {createRoom} from "./controllers/room";
+import {createMessage} from "./controllers/message";
 
 const app = Express();
 
@@ -17,8 +18,9 @@ db.authenticate()
   .then(() => console.log("DB connected"))
   .catch(() => console.error("DB not connected"));
 
-app.use(passport.initialize());
+const passportHandler = passport.initialize();
 passportMiddleware(passport);
+app.use(passportHandler);
 
 
 app.use(morgan("dev"));
@@ -28,12 +30,34 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use("/api/profile", profileRouter);
-app.use("/api/room", roomRouter);
-app.use("/api/message", messageRouter);
 
 export const server = http.createServer(app);
-const websocket = require("socket.io")(server);
-
-websocket.on("connection", () => {
-  console.log("websocket connected");
+const websocket = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+  }
 });
+
+websocket.use((socket: any, next: any) => {
+  return passportHandler(socket.request, {} as any, next);
+});
+
+
+websocket.use((socket, next) => {
+  // @ts-ignore
+  console.log(socket.request.user);
+
+  // @ts-ignore
+  if (socket.request.user) {
+    return next();
+  } else {
+    return next(new Error("unauthorized"));
+  }
+});
+
+
+websocket.on("connection", (socket) => {
+  socket.on("room:create", createRoom);
+  socket.on("message:create", createMessage);
+});
+

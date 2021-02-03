@@ -2,14 +2,15 @@ import {Request, Response} from "express";
 import {errorHandler} from "../utils/errorHandler";
 import {Message, TGetForPeriod, TMessage} from "../models/Message";
 
-export async function createMessage(req: Request<any, any, TMessage>, res: Response) {
-  try {
-    const message = await Message.create(req.body);
-    await message.save();
-    res.status(200).json(await message.getData());
-  } catch (e) {
-    errorHandler(res, e);
-  }
+export async function createMessage(req: any, res: any) {
+  console.log(req, res);
+  // try {
+  //   const message = await Message.create(req.body);
+  //   await message.save();
+  //   res.status(200).json(await message.getData());
+  // } catch (e) {
+  //   errorHandler(res, e);
+  // }
 }
 
 export async function getMessages(req: Request<any, any, TGetForPeriod>, res: Response) {
