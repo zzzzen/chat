@@ -4,7 +4,7 @@ export const getToken = () => window.localStorage.CHAT_TOKEN;
 export const setToken = (token: string) => window.localStorage.CHAT_TOKEN = token;
 
 export const api = axios.create({
-  baseURL: process.env.REACT_APP_API,
+  baseURL: `${process.env.REACT_APP_API}/api`,
   responseType: "json",
   headers: {
     Authorization: getToken()
