@@ -14,6 +14,22 @@ export type TUserInfo = {
   email?: string
 }
 
+export type TMessage = {
+  id: number,
+  userId: number,
+  roomId: number,
+  text?: string,
+  file?: string,
+  createdAt: string,
+  updatedAt: string,
+  viewersIds?: string
+}
+
+export type TRoom = {
+  id?: number,
+  name: string,
+}
+
 export type TResponseAction = {
   error: {
     config: AxiosRequestConfig,

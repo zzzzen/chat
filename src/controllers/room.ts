@@ -1,13 +1,45 @@
-import {errorHandler} from "../utils/errorHandler";
-import {Room} from "../models/Room";
+import {Room, ROOM_NOT_FOUND, TRoom} from "../models/Room";
+import {Socket} from "socket.io";
+import {IUser} from "../models/User";
+import {UserRoom} from "../models/UserRoom";
+import {events} from "../middlewares/websocket";
+import {Message, TMessage} from "../models/Message";
 
-export async function createRoom(req: any, res: any) {
-  console.log(req);
-  // try {
-  //   const room = await Room.create(req.body, req.body.usersIds);
-  //   await room.save();
-  //   res.status(200).json(await room.getData());
-  // } catch (e) {
-  //   errorHandler(res, e);
-  // }
+export type TCreateRoomReq = TRoom & {usersIds: number[]}
+export async function createRoom(req: TCreateRoomReq, socket: Socket) {
+  const room = await Room.create(req, req.usersIds);
+  await room.save();
+  socket.emit(events.roomFetch, await room.getData());
+}
+
+export type TGetRoomReq = {roomId: number}
+export async function getRoom(req: TGetRoomReq, socket: Socket) {
+  const room = await Room.getData(req.roomId);
+  socket.emit(events.roomFetch, room === ROOM_NOT_FOUND ? {
+    code: ROOM_NOT_FOUND,
+    message: "Not found"
+  } : room);
+}
+
+export async function getAllRooms(socket: Socket) {
+  const user = socket.handshake.auth as IUser;
+  const rooms = await UserRoom.getUserRooms(user.id);
+  socket.join(rooms.map((room: any) => room.id));
+  socket.emit(events.roomFetchAll, rooms);
+}
+
+export type TGetMessagesReq = {roomId: number, offset?: number, limit?: number};
+export async function getMessages(req: TGetMessagesReq, socket: Socket) {
+  const user = socket.handshake.auth as IUser;
+  const messages = await Room.getMessages(req.roomId, user.id, {offset: req.offset, limit: req.limit});
+  socket.emit(events.roomFetchMessages, messages);
+}
+
+export type TNewMessagesReq = TMessage[];
+export async function newMessages(req: TNewMessagesReq, socket: Socket) {
+  const messages = await Promise.all(req.map(message => {
+    return Message.create(message);
+  }));
+
+  socket.emit(events.roomFetchNewMessages, messages);
 }

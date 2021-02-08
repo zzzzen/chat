@@ -1,4 +1,4 @@
-import {DataTypes, Model, Optional} from "sequelize";
+import {DataTypes, Model, Op, Optional} from "sequelize";
 import {db} from "../db";
 import {Message} from "./Message";
 import {UserRoom} from "./UserRoom";
@@ -37,6 +37,35 @@ export class Room {
       order: [["createdAt", "DESC"]]
     });
     return {...data, lastMessage: messages[0]};
+  }
+
+  static async getNewMessages(roomId: number, userId: number) {
+    const newMessages = await Message.model.findAll({
+      where: {
+        roomId,
+        viewersIds: {
+          [Op.notLike]: `|${userId}|`
+        },
+      }
+    });
+    await Promise.all(newMessages.map(newMessage => {
+      const data = newMessage.get({plain: true});
+      return Message.getByUser(data.id, userId);
+    }));
+    return newMessages;
+  }
+
+  static async getMessages(roomId: number, userId: number, {offset = 0, limit = 50} = {}) {
+    const messages = await Message.model.findAll({
+      where: {roomId},
+      offset,
+      limit
+    });
+    await Promise.all(messages.map(message => {
+      const data = message.get({plain: true});
+      return Message.getByUser(data.id, userId);
+    }));
+    return messages;
   }
 
   static model = db.define<Model<TRoom, TRoomCreate>>("rooms", {

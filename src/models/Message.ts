@@ -44,10 +44,10 @@ export class Message {
     const message = await Message.model.findByPk(messageId);
     if (!message) return MESSAGE_NOT_FOUND;
 
-    const viewersIds = (message.getDataValue("viewersIds") || "").split(",");
+    const viewersIds = (message.getDataValue("viewersIds") || "").split("|");
     if (!viewersIds.includes(userId.toString())) {
       viewersIds.push(userId.toString());
-      await message.update({viewersIds: viewersIds.join(",")});
+      await message.update({viewersIds: `${viewersIds.join("|")}|`});
     }
     return message.get({plain: true});
   }
