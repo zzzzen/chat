@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import "./authorization.scss";
 import {TAuthorizationContainerProps, withAuthorization} from "../../hoc/authorization/with-authorization";
-import {MainLayout} from "../../layouts/main-layout";
+import {MainLayout} from "../../layouts/main-layout/main-layout";
 import {RegisterContainer} from "../register/register";
 import {LoginContainer} from "../login/login";
 

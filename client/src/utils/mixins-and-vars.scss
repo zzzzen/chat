@@ -20,12 +20,16 @@ $error: red;
 
 $box-shadow: 0 1px 1px rgba(97, 127, 152, 0.2), 1px 0 0 rgba(97, 127, 152, 0.1), -1px 0 0 rgba(97, 127, 152, 0.1);
 
+$background: #E7EBF0;
 $background-striped: linear-gradient(to bottom, $main 260px, #E7EAEF 260px, #E7EAEF 100%);
 
 $border-color: #E6E6E6;
 $border-active: #6BACE1;
 
 $link-color: #5683A4;
+
+$aside-col: 300px;
+$main-col: calc(100% - #{$aside-col});
 
 // MIXINS
 
