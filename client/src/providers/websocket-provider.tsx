@@ -19,7 +19,7 @@ export const events = {
   roomFetchNewMessages: "room/fetchNewMessages"
 };
 
-export const WebsocketProvider = (p: {children: React.ReactNode}) => {
+export const WebsocketProvider = React.memo((p: {children: React.ReactNode}) => {
   const socketRef = useRef(io(process.env.REACT_APP_API as string, {
     extraHeaders: {
       "Authorization": getToken()
@@ -41,7 +41,7 @@ export const WebsocketProvider = (p: {children: React.ReactNode}) => {
   }}>
     {p.children}
   </WebsocketContext.Provider>;
-};
+});
 
 export type TWebsocketProps = {
   socket: Socket,

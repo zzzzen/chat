@@ -1,6 +1,6 @@
 import React from "react";
 import {connect, ConnectedProps} from "react-redux";
-import {TDispatch, TResponseAction, TUserInfo} from "../../types/common";
+import {TDispatch, TResponseAction} from "../../types/common";
 import {ARegisterUser, TRegisterUserData} from "../../actions/user";
 import {MESSAGES} from "../../utils/messages";
 import {Yup} from "../../utils/yup";

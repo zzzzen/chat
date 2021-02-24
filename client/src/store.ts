@@ -4,11 +4,13 @@ import axiosMiddleware from "redux-axios-middleware";
 import {api} from "./utils/api";
 import {userReducer, TUserStore} from "./reducers/user";
 import {commonReducer, TCommonStore} from "./reducers/common";
+import {chatReducer, TChatStore} from "./reducers/chat";
 
 export const store = createStore(
   combineReducers({
     user: userReducer,
-    common: commonReducer
+    common: commonReducer,
+    chat: chatReducer
   }),
   composeWithDevTools(
     applyMiddleware(
@@ -18,5 +20,6 @@ export const store = createStore(
 
 export type TStore = typeof store & {
   user: TUserStore,
-  common: TCommonStore
+  common: TCommonStore,
+  chat: TChatStore
 }
