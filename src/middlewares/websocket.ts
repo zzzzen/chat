@@ -1,6 +1,5 @@
 import {Server} from "socket.io";
 import {TServer} from "../app";
-import {passportWebsocketMiddleware} from "./passport";
 import {
   createRoom,
   getAllRooms,
@@ -10,6 +9,7 @@ import {
   TGetMessagesReq,
   TGetRoomReq, TNewMessagesReq
 } from "../controllers/room";
+import {authorize} from "./passport";
 
 export const events = {
   roomCreate: "room/create",
@@ -22,7 +22,9 @@ export const events = {
   roomGetMessages: "room/getMessages",
   roomFetchMessages: "room/fetchMessages",
   roomNewMessages: "room/newMessages",
-  roomFetchNewMessages: "room/fetchNewMessages"
+  roomFetchNewMessages: "room/fetchNewMessages",
+
+  unauthorized: "unauthorized"
 };
 
 export const websocketMiddleware = (server: TServer) => {
@@ -32,17 +34,15 @@ export const websocketMiddleware = (server: TServer) => {
     }
   });
 
-  websocket.use(passportWebsocketMiddleware());
-
   websocket.on("connection", async (socket) => {
-    socket.on(events.roomCreate, (data: TCreateRoomReq) => createRoom(data, socket));
-    socket.on(events.roomGet, (data: TGetRoomReq) => getRoom(data, socket));
+    socket.on(events.roomCreate, authorize(socket, createRoom));
+    socket.on(events.roomGet, authorize(socket, getRoom));
 
-    socket.on(events.roomGetAll, () => getAllRooms(socket));
+    socket.on(events.roomGetAll, authorize(socket, getAllRooms));
 
-    socket.on(events.roomGetMessages, (data: TGetMessagesReq) => getMessages(data, socket));
-    socket.on(events.roomNewMessages, (data: TNewMessagesReq) => newMessages(data, socket));
+    socket.on(events.roomGetMessages, authorize(socket, getMessages));
+    socket.on(events.roomNewMessages, authorize(socket, newMessages));
 
-    await getAllRooms(socket);
+    // await getAllRooms(socket);
   });
 };

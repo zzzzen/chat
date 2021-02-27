@@ -1,41 +1,40 @@
 import {PassportStatic} from "passport";
 import {Request} from "express";
-import {ExtractJwt, Strategy, VerifyCallback} from "passport-jwt";
+import {ExtractJwt, Strategy} from "passport-jwt";
 import keys from "../config/keys";
-import {User} from "../models/User";
+import {IUser, User} from "../models/User";
 import {Socket} from "socket.io";
+import {MESSAGES, STATUSES} from "../utils/vars";
 
-const options = {
+
+const strategy = new Strategy({
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: keys.jwt
-};
-
-const verify: VerifyCallback = async (payload, done) => {
+}, async (payload, done) => {
   try {
     const user = await User.model.findByPk(payload.id);
     done(null, user ? user.get({plain: true}) : false);
   } catch (e) {
     console.log(e);
   }
-};
+});
 
 export const passportAppMiddleware = (passport: PassportStatic) => {
-  passport.use(new Strategy(options, verify));
+  passport.use(strategy);
 };
 
-export const passportWebsocketMiddleware = () => {
-  const strategy = new Strategy(options, verify);
+export const authorize = <T> (socket: Socket, next: (socket: Socket, user: IUser, data: T) => any) => (data: T) => {
+  strategy.success = (user) => next(socket, user, data);
 
-  return function authorize(socket: Socket, next: any) {
-    strategy.success = (user) => {
-      socket.handshake.auth = user;
-      next();
-    };
+  strategy.fail = () => socket.emit("unauthorized", {
+    status: STATUSES.UNAUTHORIZED,
+    message: MESSAGES.UNAUTHORIZED
+  });
 
-    strategy.fail = (info: any) => next(new Error(info));
+  strategy.error = () => socket.emit("unauthorized", {
+    status: STATUSES.UNAUTHORIZED,
+    message: MESSAGES.UNAUTHORIZED
+  });
 
-    strategy.error = (error) => next(error);
-
-    strategy.authenticate(socket.request as Request, {});
-  };
+  strategy.authenticate(socket.request as Request, {});
 };

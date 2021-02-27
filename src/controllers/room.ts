@@ -6,14 +6,14 @@ import {events} from "../middlewares/websocket";
 import {Message, TMessage} from "../models/Message";
 
 export type TCreateRoomReq = TRoom & {usersIds: number[]}
-export async function createRoom(req: TCreateRoomReq, socket: Socket) {
+export async function createRoom(socket: Socket, user: IUser, req: TCreateRoomReq) {
   const room = await Room.create(req, req.usersIds);
   await room.save();
   socket.emit(events.roomFetch, await room.getData());
 }
 
 export type TGetRoomReq = {roomId: number}
-export async function getRoom(req: TGetRoomReq, socket: Socket) {
+export async function getRoom(socket: Socket, user: IUser, req: TGetRoomReq) {
   const room = await Room.getData(req.roomId);
   socket.emit(events.roomFetch, room === ROOM_NOT_FOUND ? {
     code: ROOM_NOT_FOUND,
@@ -21,22 +21,20 @@ export async function getRoom(req: TGetRoomReq, socket: Socket) {
   } : room);
 }
 
-export async function getAllRooms(socket: Socket) {
-  const user = socket.handshake.auth as IUser;
+export async function getAllRooms(socket: Socket, user: IUser) {
   const rooms = await UserRoom.getUserRooms(user.id);
   socket.join(rooms.map((room: any) => room.id));
   socket.emit(events.roomFetchAll, rooms);
 }
 
 export type TGetMessagesReq = {roomId: number, offset?: number, limit?: number};
-export async function getMessages(req: TGetMessagesReq, socket: Socket) {
-  const user = socket.handshake.auth as IUser;
+export async function getMessages(socket: Socket, user: IUser, req: TGetMessagesReq) {
   const messages = await Room.getMessages(req.roomId, user.id, {offset: req.offset, limit: req.limit});
   socket.emit(events.roomFetchMessages, messages);
 }
 
 export type TNewMessagesReq = TMessage[];
-export async function newMessages(req: TNewMessagesReq, socket: Socket) {
+export async function newMessages(socket: Socket, user: IUser, req: TNewMessagesReq) {
   const messages = await Promise.all(req.map(message => {
     return Message.create(message);
   }));
