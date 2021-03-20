@@ -5,9 +5,6 @@ import {
   getAllRooms,
   getMessages,
   getRoom, newMessages,
-  TCreateRoomReq,
-  TGetMessagesReq,
-  TGetRoomReq, TNewMessagesReq
 } from "../controllers/room";
 import {authorize} from "./passport";
 
