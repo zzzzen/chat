@@ -6,7 +6,9 @@ export const setToken = (token: string) => window.localStorage.CHAT_TOKEN = toke
 export const api = axios.create({
   baseURL: `${process.env.REACT_APP_API}/api`,
   responseType: "json",
-  headers: {
-    Authorization: getToken()
-  }
+});
+
+api.interceptors.request.use(config => {
+  config.headers["Authorization"] = getToken();
+  return config;
 });
