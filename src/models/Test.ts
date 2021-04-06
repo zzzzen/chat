@@ -1,12 +1,17 @@
 import {Table, Column, Model, DataType} from "sequelize-typescript";
+import {db} from "../db";
 
-@Table
-export abstract class Test extends Model<TTestModel, TTestModel> {
+@Table({
+  modelName: "test",
+})
+export class Test extends Model<TTestModel, TTestModel> {
   @Column({
     type: DataType.STRING,
   })
   name?: string
 }
+
+db.addModels([Test]);
 
 type TTestModel = {
   name: string
